@@ -1,6 +1,8 @@
 language: php
 php:
 - 5.4
+addons: 
+ ssh_known_hosts: $MYIP
 before_install:
 - openssl aes-256-cbc -k "$PEM" -in deploy_key.enc -out deploy_key -d
 install: echo "skip install"
