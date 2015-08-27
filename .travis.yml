@@ -3,6 +3,8 @@ php:
 - 5.4
 before_install:
 - openssl aes-256-cbc -k "$PEM" -in deploy_key.enc -out deploy_key -d
+- eval "$(ssh-agent -s)"
+- ssh-add ~/.ssh/id_rsa
 install: echo "skip install"
 branches:
   only: master
@@ -11,10 +13,8 @@ after_success:
 - mv deploy_key ~/.ssh/id_rsa
 - chmod 700 ~/.ssh/
 - chmod 600 ~/.ssh/id_rsa
-- eval "$(ssh-agent -s)"
-- ssh-add ~/.ssh/id_rsa
 - git remote add deploy $DEPLOY_URL
-- git push deploy
+- git push deploy master
 env:
   global:
     secure: MRW+80hpjolUMgdrjye/yH5W+pJhUZpaP9Q31SYrXj1EsJ50ENY15e2SSihMuUaM6o1+ouE7R1OMozRJauj4nw6ox105PnS5/k2p4dwiEtBB6LPnTDmgXB7BMt4GkEPT8Pdi3WtnMdNQCRjT+o3i05OXIKRzYRrsdrgnb40S0nYVFjJxxLRmwHegJWbInfBz+Eaa/xGXM6TdAD84cRNulXilPO3HD2MfzrNG6a8DT2dA3eVjAshgeg2jkPE7cQIQm+RsmQAeiUD+QlDNm8f8rJgQ1EShJUAZLoHwZz08nZUewwkivLRTW3x9A0DwZXWpfoQVeLgIF113WGN464WEdS/5WzdxYr0KitFY1RyOLoTB2Ac3MMZqmrYZt9obxWXiVGgcLjR/gSwqvCRz8py72fj30Dq7Ts9zcZA2yDo1LVB1VpNHK59dBRzaJjQeHxAjJ0dhXwpueG284R5X1R8EMBRw6hB7XteR4Svfv10An7kuZluem8bZaA4246pw0WTIUmUJOTXatwAdGfG2Tw2ZpQckoJbAgY0+MkD8cmCU+iDsRT+z1IHSs3ouue4Tw/D+bjMO4e3t6/9xl4Vnvbz76jtKhPQlx5ZIooM5c9PNGkH078lpLGRRumG08pjIW+FthFwLBRZIjZsk5dAhosJhmELl/Ozd96uvvLqWcmmbYPQ=
