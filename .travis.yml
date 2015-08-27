@@ -3,16 +3,16 @@ php:
 - 5.4
 before_install:
 - openssl aes-256-cbc -k "$PEM" -in deploy_key.enc -out deploy_key -d
-- mv deploy_key ~/.ssh/id_rsa
-- eval "$(ssh-agent -s)"
-- ssh-add ~/.ssh/id_rsa
 install: echo "skip install"
 branches:
   only: master
 before_script: ssh-keyscan -H -t rsa $MYIP >> ~/.ssh/known_hosts
 after_success:
+- mv deploy_key ~/.ssh/id_rsa
 - chmod 700 ~/.ssh/
 - chmod 600 ~/.ssh/id_rsa
+- eval "$(ssh-agent -s)"
+- ssh-add ~/.ssh/id_rsa
 - git remote add deploy $DEPLOY_URL
 - git push deploy master
 env:
