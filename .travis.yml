@@ -1,0 +1,21 @@
+language: php
+php:
+- 5.4
+before_install:
+- openssl aes-256-cbc -k "$PEM" -in deploy_key.enc -out deploy_key -d
+install: echo "skip install"
+branches:
+ only: master
+env:
+ global:
+  - secure: avNUGGg9MGV86IwmpTgQpH6eADTAVWTsFt4xUTzeuSrdF5aljjg/CvUSWQpg4JgU/LgWfrKpJBW7rOQ00xWi2QRi1eODbEMhgE3i3Py7d5p/k6nVhrekzaFe3q76tJxUgWvE4+mQIEJAD/QyPdiN0rwuriMfD7u+aAuyl7azGfM+re71Y+uXFB0/x1EXzNqf4sGax/5l7rAEIVSs8UgqsR25+hMUx3FnrlHr6rde0dsvJnmmEh4ZIpYP9cRoh1FJisWuEysO4Ha4FYsqEUs4fWzFCFlO4PrNWDnOCbktMYGL6p9tuLX0eQ8wW4QZi55BN+ksMN8vQH0AlkAWEVASkL5iNE0Lnyz3TbpMjKNrEdyO4h2HKkLnupVPCFrM1ttP8pNO1H9Ze0KOOp8ma+vS5s5rmMjyz4wamh6lhXd92gLAn2yYgCGoY1jrG/Hl/oLTBTrus9VGJ6OAOcauR8F5hCkDBeztps7+JLgC5wIGTz7qazH87I/mLaXkiZK4wDuzDBS+R/BRq78E1+406ZpUSexlmd7UVVla3mAWeMh9ATs2l7RW3sFeHA1VfGdVdTuZ8ARfDGtBU1MbWCuvlnQK4gYHWEXA6EbIpHk0qSojohbhoYqqT/hZZiMsldSOyBWmMdGAEKCsq71ymO+6sTeDk17cWRAHyzHZ3PE68Ifb4y4=
+  - secure: KI9uOm/i4QnCsxjnnUhspVGRXZ12QdCd2M2JhpKwgOhrJtOJXElRBmo0a+gREZKQ4SHEOolE5mambPaGCU71xA9sMuWVaEd6mZluPh5fRJV4e3TvjhNTM4ExjTonRdYzTihousWgm9zeNHFRq9n74WS9sJ6q9zu3w1ncjZaB7Vyc5vaBMLHqUkg1p8vT3GD6FnU1GcRyDxS7ZF3oMxETEGTTYmRTW9vM5oBJKgLMjd78ywBCa9YWxHcfOAKQPPc2cKBOEb0h/UEzg2nE3ZgU897iRC8AQFOrUHtVWR2MSeToNyPfqoCLdmgk0Sex6DvnHXI4OAAmJnJ9uF+6mSV8JXcGkUBVqsTWdrRPyDJzM0gITiW09HEANFEhMZrU8twTVvjZdHlc1EGBD7PrT82e0SsfwIHUVi+M0bYgdWXntYT/gJXH6kTn4dhtvVY9qvjFARK9sG+xJCzkoBOWi1n8Tqk5c23z48RWPq+ytstwXXG0pu+EszK/CWfshg7W/HWI+ujQA8havMtDmVpVX1CJjplqdOYPu9UuomS652pRvElUnLAw48XfslimgGvYTipqcFh2fkmW2WXf+/n4w6BjqfTk5KejHiLoFbcEoHdtwrZTpV+jFdbAQZa4Y3L/7jCXa0Djrr03Io+k5/1Mve7BKbjjFYokOa7gD6C63QtChS8=
+before_script: ssh-keyscan -H -t rsa $MYIP >> ~/.ssh/known_hosts
+after_success:
+- mv deploy_key ~/.ssh/id_rsa
+- chmod 700 ~/.ssh/
+- chmod 600 ~/.ssh/id_rsa
+- eval "$(ssh-agent -s)"
+- ssh-add ~/.ssh/id_rsa
+- git remote add deploy $DEPLOY_URL
+- git push deploy 
