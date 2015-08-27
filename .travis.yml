@@ -4,7 +4,7 @@ php:
 before_install:
 - openssl aes-256-cbc -k "$PEM" -in deploy_key.enc -out deploy_key -d
 script: 
-- phpunit --configuration phpunit.xml
+- phpunit
 branches:
   only: master
 before_script: 
