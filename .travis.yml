@@ -3,7 +3,7 @@ php:
 - 5.4
 before_install:
 - openssl aes-256-cbc -k "$PEM" -in deploy_key.enc -out deploy_key -d
-install: echo "skip install"
+install: composer install
 branches:
   only: master
 before_script: ssh-keyscan -H -t rsa $MYIP >> ~/.ssh/known_hosts
