@@ -3,7 +3,9 @@ php:
 - 5.4
 before_install:
 - openssl aes-256-cbc -k "$PEM" -in deploy_key.enc -out deploy_key -d
-install: composer install
+install: 
+- composer install
+- phpunit
 branches:
   only: master
 before_script: ssh-keyscan -H -t rsa $MYIP >> ~/.ssh/known_hosts
